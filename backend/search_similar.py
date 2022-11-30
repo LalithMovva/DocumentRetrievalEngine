@@ -58,7 +58,7 @@ pdfs_list = []
 #load dataset and faiss index
 #def load_dataset():
     #pdfs_list = []
-folder_dir = "/Users/lalithmovva/Downloads/docus"
+folder_dir = "./docus"
 for pdf in os.listdir(folder_dir):
   pdfs_list.append(folder_dir+'/'+pdf)
 
@@ -126,4 +126,4 @@ def find_document():
 
 if __name__ == "__main__":
     
-    app.run(port=8080, debug=True)
+    app.run(host ='0.0.0.0', port=8080, debug=True)
