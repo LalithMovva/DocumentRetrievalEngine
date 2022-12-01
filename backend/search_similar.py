@@ -9,12 +9,22 @@ from flask_cors import CORS
 import os
 import pickle
 from io import BytesIO
+from pathlib import Path
 
 app = Flask(__name__)
-CORS(app)
+CORS(app) 
 
 tokenizer = AutoTokenizer.from_pretrained('allenai/specter')
 model = AutoModel.from_pretrained('allenai/specter')
+
+
+#convert the text to embeddings 
+def convert_text_to_embeddings(text):
+  inputs = tokenizer(text, padding=True, truncation=True, return_tensors="pt", max_length=512)
+  result = model(**inputs)
+
+  embeddings = result.last_hidden_state[:, 0, :]
+  return embeddings
 
 #global tokenizer
 #global model
@@ -24,35 +34,39 @@ pdfs_list = []
 #folder_dir = ""
 
 
-# folder_dir = "/Users/lalithmovva/Downloads/docus"
 
-# text_list = []
-# for docu in os.listdir(folder_dir):
-#   GROBID_URL = 'https://cloud.science-miner.com/grobid/' 
-#   url = '%s/api/processFulltextDocument' % GROBID_URL
-#   xml = requests.post(url, files={'input': open(folder_dir+'/'+docu, 'rb')}).text
-#   soup = BeautifulSoup(xml, 'xml')
+my_file = Path("saved_index.faiss")
+if not my_file.is_file():
+  folder_dir = "./docus"
+  files_list = []
+  text_list = []
+  for docu in os.listdir(folder_dir):
+    GROBID_URL = 'https://cloud.science-miner.com/grobid/' 
+    url = '%s/api/processFulltextDocument' % GROBID_URL
+    xml = requests.post(url, files={'input': open(folder_dir+'/'+docu, 'rb')}).text
+    soup = BeautifulSoup(xml, 'xml')
+    files_list.append(folder_dir+'/'+docu)
+    names_abs = soup.find_all('abstract')
 
-#   names_abs = soup.find_all('abstract')
+  #for name in names_abs:
+  #    print(name.text)
+    abs = names_abs[0].text
+    names_title = soup.find_all('title')
+    tit = names_title[0].text
+    text_list.append(tit+'[SEP]'+abs)
 
-# #for name in names_abs:
-# #    print(name.text)
-#   abs = names_abs[0].text
-#   names_title = soup.find_all('title')
-#   tit = names_title[0].text
-#   text_list.append(tit+'[SEP]'+abs)
+  my_dict = {'text': text_list, 'location': files_list}
+  dataset1 = Dataset.from_dict(my_dict)
 
-# my_dict = {'text': text_list}
-# dataset1 = Dataset.from_dict(my_dict)
+  ds_with_embeddings1 = dataset1.map(
+      lambda example: {'embeddings':convert_text_to_embeddings(example['text'])}, batched=True, batch_size=64)
+  ds_with_embeddings1.add_faiss_index(column='embeddings')
+  ds_with_embeddings1.save_faiss_index('embeddings', 'saved_index.faiss')
 
-# ds_with_embeddings1 = dataset1.map(
-#     lambda example: {'embeddings':convert_text_to_embeddings(example['text'])}, batched=True, batch_size=64)
-# ds_with_embeddings1.add_faiss_index(column='embeddings')
-# ds_with_embeddings1.save_faiss_index('embeddings', 'saved_index.faiss')
+  import pickle
+  with open('saved_dictionary.pkl', 'wb') as f:
+      pickle.dump(my_dict, f)
 
-# import pickle
-# with open('saved_dictionary.pkl', 'wb') as f:
-#     pickle.dump(my_dict, f)
 
 
 #load dataset and faiss index
@@ -89,19 +103,12 @@ def pdf_to_text(file_path):
 
   return title+'[SEP]'+abstract
 
-#convert the text to embeddings 
-def convert_text_to_embeddings(text):
-  inputs = tokenizer(text, padding=True, truncation=True, return_tensors="pt", max_length=512)
-  result = model(**inputs)
-
-  embeddings = result.last_hidden_state[:, 0, :]
-  return embeddings
 
 #search the similar file when a text is given as input
 def search(text):
   prompt1 = convert_text_to_embeddings(text)
   scores1, retrieved_examples1 = dataset1.get_nearest_examples('embeddings', prompt1.detach().numpy(), k=3)
-  return pdfs_list[text_list_map['text'].index(retrieved_examples1['text'][0])]
+  return text_list_map['location'][text_list_map['text'].index(retrieved_examples1['text'][0])]
 
 #find the similar document when the file_path is given as input
 @app.route('/api/uploadfile', methods=['GET', 'POST'])
