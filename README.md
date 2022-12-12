@@ -4,13 +4,21 @@ The goal of this project is to build a Document retrieval engine where a user up
 Software:
 
 Python Flask
+
 Docker
+
 React
+
 AWS S3
+
 Grobid(GeneRation Of BIbliographic Data.)
+
 SPECTER (Transformer based NLP model)
+
 Facebook AI Similarity Search 
+
 Kubernetes
+
 Firebase
 
 
