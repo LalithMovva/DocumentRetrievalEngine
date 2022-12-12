@@ -21,9 +21,9 @@ model = AutoModel.from_pretrained('allenai/specter')
 
 import boto3
 s3 = boto3.client('s3',
-                    aws_access_key_id='ASIASKNPYEOL3YA33X7T',
-                    aws_secret_access_key= 'R2vr0qy5uK5nBbn+NQKWxGdo7bdwsUZaZEiz5xFY',
-                    aws_session_token='IQoJb3JpZ2luX2VjEHYaCXVzLXdlc3QtMiJIMEYCIQDfXuoJ+B/y5vjKwFGYx+abYzCHtfOizEyBKMYLPamblQIhAMVbefVrFjqklsFc/7pOazuSN/lvXepw8nQ7tQdp8S6PKuABCJ///////////wEQABoMMTU5ODE5MjQ0NDM5IgyVik67rAjXrAOFkd8qtAE0OZ7zuT/QXcTuEvylJROaP2lIHZMn1cHBOGz1RgkJY51ds2R0glLk0EzfewvPsLcauAYbJUNf7pcv2zTdOufJkINV/z/bC+PMOr/ucXDex8i6FfD25EbcjmUIRsXdO6L7L1uiSDCxxXsxz0Ima0rs079EzjxhkdTTme1xdgyXOeF061039Oinq1JWVxqX+vBoTx+XOiyUKfg+7ntSs3ZZ4dtss3R3D1ONLRPNZm5EtE663cww84HbnAY6lwE3Px61NGu1Qoc/eFevBrE0p8wBYOnEoXHJimEGAcaxEdIjxLnqR3EtHXOh9estUKZXRhgxJZOmyxxotjEWAryE/x0m9a6U1GKP2rZgYmXwORVDur/PjIQmzQi+oE7Tp5kVQfVZOR8N9eOpfDC5KOQ+H0jqDVBJmwQcpLvhu22NZdEHHp9X/7Ll9P4s/FS4sLOSaJkMIJJe'
+                    aws_access_key_id='ASIASKNPYEOLYR42C65Q',
+                    aws_secret_access_key= 'qK4bHmIIiJYawijiQ4E2J1T6cHQiumGGS3JSDlPC',
+                    aws_session_token='IQoJb3JpZ2luX2VjEHcaCXVzLXdlc3QtMiJHMEUCIDGcOzgLihxierUDiCnnCKiB2NeIuK9UnsyOnUczBVP8AiEA/GwPEdXnFbkWNhR2NczRr8TYI8b6Y+T/SkeOVZM9jkQq4AEIoP//////////ARAAGgwxNTk4MTkyNDQ0MzkiDD+CRbMWdqtv6WY7TSq0AWCDzydu/TPfGa50ttbcnFb2DI9zT0Rzinb/9VGdvIYi88JNnl2djKEBGOvlEjSdE4P2T7iVgAIIOe9Loa7dnlw50m2j9xNb72XC3MJUWyu3M4P1pq79UzcZ2PTM8jG1/jVLRP8IhxwZjavhJgHRapnFvmbgNrFFpA8gWQLug0XAfKWDZ9lgq/qBVokud4KBd15pMNrQJePNZ1axsdVoy0Oinik0iyJnJ6pHSyU+tje57sYUXDC1mtucBjqYATBWYnNxj9LQLhd7Nu4mTxxyv0qKU9lA+lNBwMcH4KDVelyr/Eo2LG23iJt73GbFLGFMk0dpQSZGP94ZtnlukgaIDT7l7eG6UORrMgT0lIj/+B024mdT9i8CL67cCUNHDOaAgD+PhLW8U5+HSaFFUH/OfujS01+uGU8ezqMUyT/Bp96WCFniJvQgxuhSFWr2g0wval+YXl9B'
                      )
 BUCKET_NAME='document-retreival-dcsc'
 
