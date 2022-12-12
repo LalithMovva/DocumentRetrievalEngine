@@ -69,7 +69,7 @@ function App() {
           <Route
             path='/login'
             element={
-              <Form
+              <Form style={{"paddingTop":"50dp"}}
                 title="Login"
                 setEmail={setEmail}
                 setPassword={setPassword}
@@ -79,7 +79,7 @@ function App() {
           <Route
             path='/register'
             element={
-              <Form
+              <Form style={{"paddingTop":"50dp"}}
                 title="Register"
                 setEmail={setEmail}
                 setPassword={setPassword}

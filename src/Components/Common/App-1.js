@@ -108,6 +108,7 @@ import { ProgressBar } from 'react-bootstrap';
 import {withRouter} from './withRouter';
 import * as ReactBootStrap from 'react-bootstrap';
 import LinearProgress, { LinearProgressProps } from '@mui/material/LinearProgress';
+import { lightGreen } from '@mui/material/colors';
 
 class App extends Component {
 
@@ -123,7 +124,8 @@ class App extends Component {
 	pdf1Link: "",
 	pdf2Name: "",
 	pdf2Score: 0,
-	pdf2Link: ""
+	pdf2Link: "",
+	lights: true,
 	};
 	
 	// On file select (from the pop up)
@@ -178,6 +180,7 @@ class App extends Component {
 		this.setState({pdf1Score:res.data.pdf1Score})
 		this.setState({percentage: 100})
 		this.setState({loading:true})
+		this.setState({lights:false})
 
 		return ( 
 			<div>
@@ -252,7 +255,7 @@ class App extends Component {
 		);
 	} else {
 		return (
-		<div>
+		<div style={{"paddingTop":"100px"}}>
 			<br />
 			<h4>Choose file before Pressing the Upload button</h4>
 			
@@ -260,6 +263,7 @@ class App extends Component {
 		);
 	}
 	};
+	
 	
 	// state = {
 	// 	navigate: false
@@ -284,20 +288,20 @@ class App extends Component {
 		
 	const {percentage} = this.state;
 	return (
-		<div>
-			<h3>
+		<div style={{"paddingTop":"50px"}} >
+			<h3 style={{color:"green"}}>
 			Document Retreival Engine!
 			</h3>
 	
-			<div>
+			<div style={{"paddingTop":"50px","paddingBottom":"50px",backgroundColor:"white"}} >
 				<input type="file" onChange={this.onFileChange} />
 				<button onClick={this.onFileUpload}>
 				Upload!
 				</button>
-				{percentage>0 && <ProgressBar now={percentage} active label={`${percentage}%`} />}
+				{/* {percentage>0 && <ProgressBar now={percentage} active label={`${percentage}%`} />} */}
 				{this.state.loading? <></>:<ReactBootStrap.Spinner animation="border" />}
 			</div>
-			<div>
+			<div style={{"paddingTop":"50px"}}>
 		{this.fileData()}
 		
 		
@@ -309,9 +313,10 @@ class App extends Component {
 		{this.state.pdf2Score}<br/>
 		{this.state.pdf2Name} */}
 		<p><a href={this.state.pdf1Link}>{this.state.pdf1Name}</a></p>
-		<LinearProgressWithLabel value={80} />
+		{this.state.lights? <></>:<LinearProgress variant="buffer" value={85} color="secondary" valueBuffer={85}/>}
 		<p><a href={this.state.pdf2Link}>{this.state.pdf2Name}</a></p>
-		<LinearProgressWithLabel value={60} />
+		{this.state.lights? <></>:<LinearProgress variant="buffer" value={60} color="secondary" valueBuffer={85}/>}
+		
 		{/* <Text
             style={styles.hyperlinkStyle}
             onPress={() => {

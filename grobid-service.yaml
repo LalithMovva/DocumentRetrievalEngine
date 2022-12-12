@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.27.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: grobid
+  name: grobid
+spec:
+  ports:
+    - name: "8070"
+      port: 8070
+      targetPort: 8070
+  selector:
+    io.kompose.service: grobid
+status:
+  loadBalancer: {}

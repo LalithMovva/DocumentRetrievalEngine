@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.27.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: grobid
+  name: grobid
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: grobid
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.27.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: grobid
+    spec:
+      containers:
+        - image: lalithmovva/grobid
+          name: grobid
+          ports:
+            - containerPort: 8070
+          resources: {}
+      restartPolicy: Always
+status: {}
