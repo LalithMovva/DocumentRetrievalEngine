@@ -1,213 +1,106 @@
-// import logo from './logo.svg';
-// import './App.css';
-// import React, { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
+import './App.css';
+import Form from './Components/Common/Form';
+import Home from './Components/Common/Home';
+import AppHome from './Components/Common/App-1';
+//import upload from './Components/Common/upload';
 
-// import axios from 'axios';
+import {
+  Routes,
+  Route,
+  useNavigate
+} from "react-router-dom";
+import { app } from './firebase-config';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
+function App() {
 
+  const [email, setEmail] = useState('');
 
-// function App() {
+  const [password, setPassword] = useState('');
 
-//   const state = {
-  
-//     // Initially, no file is selected
-//     selectedFile: null
-//   };
-
-//   // On file select (from the pop up)
-//   const onFileChange = event => {
-     
-//     // Update the state
-//     this.setState({ selectedFile: event.target.files[0] });
-   
-//   };
-   
-//   // On file upload (click the upload button)
-//   const onFileUpload = () => {
-   
-//     // Create an object of formData
-//     const formData = new FormData();
-   
-//     // Update the formData object
-//     formData.append(
-//       "myFile",
-//       this.state.selectedFile,
-//       this.state.selectedFile.name
-//     );
-   
-//     // Details of the uploaded file
-//     console.log(this.state.selectedFile);
-   
-//     // Request made to the backend api
-//     // Send formData object
-//     axios.post("api/uploadfile", formData);
-//   };
-
-
-
-
-//   const fileData = () => {
-     
-//     if (this.state.selectedFile) {
-        
-//       return (
-//         <div>
-//           <h2>File Details:</h2>
-//           <p>File Name: {this.state.selectedFile.name}</p>
-  
-//           <p>File Type: {this.state.selectedFile.type}</p>
-  
-//           <p>
-//             Last Modified:{" "}
-//             {this.state.selectedFile.lastModifiedDate.toDateString()}
-//           </p>
-  
-//         </div>
-//       );
-//     } else {
-//       return (
-//         <div>
-//           <br />
-//           <h4>Choose before Pressing the Upload button</h4>
-//         </div>
-//       );
-//     }
-//   };
-
-
-
-//   return (
-//     <div>
-//         <h1>
-//           GeeksforGeeks
-//         </h1>
-//         <h3>
-//           File Upload using React!
-//         </h3>
-//         <div>
-//             <input type="file" onChange={this.onFileChange} />
-//             <button onClick={this.onFileUpload}>
-//               Upload!
-//             </button>
-//         </div>
-//       {this.fileData()}
-//     </div>
-//   );
-
-// }
-
-// export default App;
-
-import axios from 'axios';
-
-import React,{Component} from 'react';
-
-
-
-class App extends Component {
-
-	state = {
-
-	// Initially, no file is selected
-	selectedFile: null,
-  checkFile: null
-	};
-	
-	// On file select (from the pop up)
-	onFileChange = event => {
-	
-	// Update the state
-	this.setState({ selectedFile: event.target.files[0] });
-	
-	};
-	
-	// On file upload (click the upload button)
-	onFileUpload = () => {
-	
-	// Create an object of formData
-	const formData = new FormData();
-	
-	// Update the formData object
-	formData.append('File',this.state.selectedFile);
-  console.log(Object.fromEntries(formData.entries()))
-	
-	// Details of the uploaded file
-	//console.log(this.state.selectedFile);
-	
-	// Request made to the backend api
-	// Send formData object
-	axios.post("api/uploadfile", formData, {responseType: 'arraybuffer'}).then(res => 
-    {
-      const file = new Blob(
-        [res.data], 
-        {type: 'application/pdf'});
-        //console.log(res.data);
-  //Build a URL from the file
-        //console.log(res.data)
-      const fileURL = URL.createObjectURL(file);
-  //Open the URL on new Window
-      window.open(fileURL);
+  let navigate = useNavigate();
+  const handleAction = (id) => {
+    const authentication = getAuth();
+    if (id === 1) {
+      signInWithEmailAndPassword(authentication, email, password)
+        .then((response) => {
+          navigate('/home')
+          sessionStorage.setItem('Auth Token', response._tokenResponse.refreshToken)
+        })
+        .catch((error) => {
+          console.log(error.code)
+          if (error.code === 'auth/wrong-password') {
+            toast.error('Please check the Password');
+          }
+          if (error.code === 'auth/user-not-found') {
+            toast.error('Please check the Email');
+          }
+        })
     }
-    )
-  //   .then(
-  //   data => {
-  //       //set_image_loc(data.img);
-        
-  //       this.setState({checkFile : new File(
-  //         [data], "check.pdf"
-  //     ) });
-  //       console.log(this.state.checkFile.name)
-  //   }
-  // );
-	};
-	
-	// File content to be displayed after
-	// file upload is complete
-	fileData = () => {
-	
-	if (this.state.selectedFile) {
-		
-		return (
-		<div>
-			<h2>File Details:</h2>
-			<p>File Name: {this.state.selectedFile.name}</p>
+    if (id === 2) {
+      createUserWithEmailAndPassword(authentication, email, password)
+        .then((response) => {
+          navigate('/home')
+          sessionStorage.setItem('Auth Token', response._tokenResponse.refreshToken)
+        })
+        .catch((error) => {
+          if (error.code === 'auth/email-already-in-use') {
+            toast.error('Email Already in Use');
+          }
+        })
+    }
+  }
 
-			<p>File Type: {this.state.selectedFile.type}</p>
+  useEffect(() => {
+    let authToken = sessionStorage.getItem('Auth Token')
 
-			<p>
-			Last Modified:{" "}
-			{this.state.selectedFile.lastModifiedDate.toDateString()}
-			</p>
+    if (authToken) {
+      navigate('/home')
+    }
+  }, [])
+  return (
+    <div className="App">
+      <>
+        <ToastContainer />
+        <Routes>
+          <Route
+            path='/login'
+            element={
+              <Form
+                title="Login"
+                setEmail={setEmail}
+                setPassword={setPassword}
+                handleAction={() => handleAction(1)}
+              />}
+          />
+          <Route
+            path='/register'
+            element={
+              <Form
+                title="Register"
+                setEmail={setEmail}
+                setPassword={setPassword}
+                handleAction={() => handleAction(2)}
+              />}
+          />
 
-		</div>
-		);
-	} else {
-		return (
-		<div>
-			<br />
-			<h4>Choose before Pressing the Upload button</h4>
-		</div>
-		);
-	}
-	};
-	
-	render() {
-	
-	return (
-		<div>
-			<h3>
-			File Upload using React!
-			</h3>
-			<div>
-				<input type="file" onChange={this.onFileChange} />
-				<button onClick={this.onFileUpload}>
-				Upload!
-				</button>
-			</div>
-		{this.fileData()}
-		</div>
-	);
-	}
+          <Route
+            path='/home'
+            element={
+              <AppHome />}
+          />
+		  {/* <Route
+            path='/test'
+            element={
+              <upload />}
+          /> */}
+        </Routes>
+      </>
+    </div>
+  );
 }
 
 export default App;
