@@ -21,9 +21,9 @@ model = AutoModel.from_pretrained('allenai/specter')
 
 import boto3
 s3 = boto3.client('s3',
-                    aws_access_key_id='ASIASKNPYEOLYR42C65Q',
-                    aws_secret_access_key= 'qK4bHmIIiJYawijiQ4E2J1T6cHQiumGGS3JSDlPC',
-                    aws_session_token='IQoJb3JpZ2luX2VjEHcaCXVzLXdlc3QtMiJHMEUCIDGcOzgLihxierUDiCnnCKiB2NeIuK9UnsyOnUczBVP8AiEA/GwPEdXnFbkWNhR2NczRr8TYI8b6Y+T/SkeOVZM9jkQq4AEIoP//////////ARAAGgwxNTk4MTkyNDQ0MzkiDD+CRbMWdqtv6WY7TSq0AWCDzydu/TPfGa50ttbcnFb2DI9zT0Rzinb/9VGdvIYi88JNnl2djKEBGOvlEjSdE4P2T7iVgAIIOe9Loa7dnlw50m2j9xNb72XC3MJUWyu3M4P1pq79UzcZ2PTM8jG1/jVLRP8IhxwZjavhJgHRapnFvmbgNrFFpA8gWQLug0XAfKWDZ9lgq/qBVokud4KBd15pMNrQJePNZ1axsdVoy0Oinik0iyJnJ6pHSyU+tje57sYUXDC1mtucBjqYATBWYnNxj9LQLhd7Nu4mTxxyv0qKU9lA+lNBwMcH4KDVelyr/Eo2LG23iJt73GbFLGFMk0dpQSZGP94ZtnlukgaIDT7l7eG6UORrMgT0lIj/+B024mdT9i8CL67cCUNHDOaAgD+PhLW8U5+HSaFFUH/OfujS01+uGU8ezqMUyT/Bp96WCFniJvQgxuhSFWr2g0wval+YXl9B'
+                    aws_access_key_id='',
+                    aws_secret_access_key= '',
+                    aws_session_token=''
                      )
 BUCKET_NAME='document-retreival-dcsc'
 
